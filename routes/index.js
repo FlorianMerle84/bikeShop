@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-
-var dataCardBike =[];
+var basket = [];
+// var req.session.dataCardBike =[];
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -13,6 +13,7 @@ router.get('/', function(req, res, next) {
     {name: "Model TITAN5", url:"/images/bike-5.jpg", price: 989},
     {name: "Model AMIG39", url:"/images/bike-6.jpg", price: 599}
   ]
+  dataCardBike = [];
   res.render('index', { dataBike:dataBike });
 });
 
@@ -23,22 +24,25 @@ router.get('/shop', function(req, res, next) {
 
 //ajout dans le panier
 router.post('/add-shop', function(req, res, next) {
-  console.log(req.body);
-  dataCardBike.push(req.body)
+  // console.log(req.body);
+  req.session.dataCardBike = req.body;
+  dataCardBike.push(req.session.dataCardBike);
+  basket.push(dataCardBike);
   res.render('shop', {dataCardBike});
+  console.log(basket);
 });
 
 //suppr d'un element du panier
 router.get('/delete-shop', function(req, res, next) {
-  dataCardBike.splice(req.query.position, 1)
-  res.render('shop', {dataCardBike});
+  req.session.dataCardBike.splice(req.query.position, 1)
+  res.render('shop', {dataCardBike: req.session.dataCardBike});
 });
 
 //modification d'un element du panier
 router.post('/update-shop', function(req, res, next) {
   console.log(req.body);
   dataCardBike[req.body.position].quantity = req.body.quantity;
-  res.render('shop', {dataCardBike});
+  res.render('shop', {dataCardBike: req.session.dataCardBike});
 });
 
 module.exports = router;

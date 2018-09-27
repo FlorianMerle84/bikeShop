@@ -25,20 +25,10 @@ router.get('/shop', function(req, res, next) {
 //ajout dans le panier
 router.post('/add-shop', function(req, res, next) {
   if (req.session.dataCardBike == undefined) {
-    req.session.dataCardBike = [{
-      url: req.body.url,
-      name: req.body.name,
-      price: req.body.price,
-      quantity: req.body.quantity
-    }];
+    req.session.dataCardBike = [req.body];
     res.render('shop', { dataCardBike : req.session.dataCardBike });
   } else {
-    req.session.dataCardBike.push({
-      url: req.body.url,
-      name: req.body.name,
-      price: req.body.price,
-      quantity: req.body.quantity
-    });
+    req.session.dataCardBike.push(req.body);
     res.render('shop', {dataCardBike : req.session.dataCardBike });
   }
 });
